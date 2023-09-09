@@ -1,7 +1,6 @@
 import random
 
 rawvals = [int(x) for x in input().split(' ')]
-print()
 height = rawvals[0]
 width = rawvals[1]
 
@@ -48,6 +47,8 @@ if palin_cols == 0 or palin_rows == 0:
             grid[i][j] = ALPHABET[cur_char_pos]
             if width % 26 == 0: cur_char_pos = (cur_char_pos + 3) % 25 
             else: cur_char_pos = (cur_char_pos + 1) % 25
+        if grid[i][0] == ALPHABET[cur_char_pos]:
+            cur_char_pos = (cur_char_pos + 1) % 25
 
     if palin_cols == 0 and palin_rows == 0:
         pass
@@ -76,8 +77,7 @@ else:
     rm_col_pals = width - palin_cols
     rm_row_pals = height - palin_rows
 
-    for x in range(rm_col_pals):
-        grid[-1][len(grid[-1]) - 1 - x] = "b"
+    grid[-1] = list("a" * palin_cols + "b" * rm_col_pals)
 
     for x in range(rm_row_pals):
         grid[len(grid) - 1 - x][-1] = "b"
@@ -87,4 +87,4 @@ fincalc = calc_grid(grid)
 if fincalc[0] != palin_cols or fincalc[1] != palin_rows:
     imp()
 
-print('\n'.join([' '.join(x) for x in grid]))
+print('\n'.join([''.join(x) for x in grid]))
