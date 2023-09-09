@@ -8,6 +8,8 @@ width = rawvals[1]
 palin_cols = rawvals[2]
 palin_rows = rawvals[3]
 
+ALPHABET = list("abcdefghijklmnopqrstuvwxyz")
+
 def is_pal(s): return (s[::-1] == s)
 
 def calc_grid(grd): #return n in cols, n in rows
@@ -26,7 +28,10 @@ def calc_grid(grd): #return n in cols, n in rows
     for r in grd2:
         if is_pal(''.join(r)): ncols += 1
 
-    return (ncols, nrows)
+    return [ncols, nrows]
+
+def make_simple_pal(c1, c2, l): #char1, char2, length
+    return c1 + c2 * (l - 2) + c1
 
 def imp():
     print("IMPOSSIBLE")
@@ -36,13 +41,21 @@ if palin_cols > width or palin_rows > height: imp()
 
 grid = [["a" for y in range(width)] for x in range(height)]
 
-t = 0
+if palin_rows == 0 and palin_cols == 0:
+    cur_char_pos = 0
+    for i in range(height):
+        for j in range(width):
+            grid[i][j] = ALPHABET[cur_char_pos]
+            if width % 26 == 0: cur_char_pos = (cur_char_pos + 3) % 25 
+            else: cur_char_pos = (cur_char_pos + 1) % 25
+elif palin_cols == 0:
+    cur_char_pos = 0
+    n = 0
+    while calc_grid(grid)[1] < palin_rows:
+        grid[n] = list(make_simple_pal(ALPHABET[cur_char_pos], ALPHABET[(cur_char_pos + 1) % 25], width))
+        cur_char_pos = (cur_char_pos + 1) % 25
+        n+=1
 
-while calc_grid(grid) != (palin_cols, palin_rows):
-    grid[random.randint(0, height - 1)][random.randint(0, width - 1)] = ["a", "b", "c"][random.randint(0, 2)]
-    t += 1
-    print(str(t))
-    print('\n'.join([' '.join(x) for x in grid]))
+elif palin_rows == 0:
 
-print(str(t))
 print('\n'.join([' '.join(x) for x in grid]))
