@@ -5,8 +5,8 @@ print()
 height = rawvals[0]
 width = rawvals[1]
 
-palin_cols = rawvals[2]
-palin_rows = rawvals[3]
+palin_rows = rawvals[2]
+palin_cols = rawvals[3]
 
 ALPHABET = list("abcdefghijklmnopqrstuvwxyz")
 
@@ -41,31 +41,50 @@ if palin_cols > width or palin_rows > height: imp()
 
 grid = [["a" for y in range(width)] for x in range(height)]
 
-cur_char_pos = 0
-for i in range(height):
-    for j in range(width):
-        grid[i][j] = ALPHABET[cur_char_pos]
-        if width % 26 == 0: cur_char_pos = (cur_char_pos + 3) % 25 
-        else: cur_char_pos = (cur_char_pos + 1) % 25
-
-if palin_cols == 0:
+if palin_cols == 0 or palin_rows == 0:
     cur_char_pos = 0
-    n = 0
-    while calc_grid(grid)[1] < palin_rows:
-        grid[n] = list(make_simple_pal(ALPHABET[cur_char_pos], ALPHABET[(cur_char_pos + 1) % 25], width))
-        cur_char_pos = (cur_char_pos + 1) % 25
-        n+=1
+    for i in range(height):
+        for j in range(width):
+            grid[i][j] = ALPHABET[cur_char_pos]
+            if width % 26 == 0: cur_char_pos = (cur_char_pos + 3) % 25 
+            else: cur_char_pos = (cur_char_pos + 1) % 25
 
-elif palin_rows == 0:
-    cur_char_pos = 0
-    n = 0
-    while calc_grid(grid)[0] < palin_cols:
-        pal = make_simple_pal(ALPHABET[cur_char_pos], ALPHABET[(cur_char_pos + 1) % 25], height)
+    if palin_cols == 0 and palin_rows == 0:
+        pass
 
-        for x in range(height):
-            grid[x][n] = pal[x]
-        
-        cur_char_pos = (cur_char_pos + 1) % 25
-        n+=1
+    elif palin_cols == 0:
+        cur_char_pos = 0
+        n = 0
+        while calc_grid(grid)[1] < palin_rows:
+            grid[n] = list(make_simple_pal(ALPHABET[cur_char_pos], ALPHABET[(cur_char_pos + 1) % 25], width))
+            cur_char_pos = (cur_char_pos + 1) % 25
+            n+=1
+
+    elif palin_rows == 0:
+        cur_char_pos = 0
+        n = 0
+        while calc_grid(grid)[0] < palin_cols:
+            pal = make_simple_pal(ALPHABET[cur_char_pos], ALPHABET[(cur_char_pos + 1) % 25], height)
+
+            for x in range(height):
+                grid[x][n] = pal[x]
+            
+            cur_char_pos = (cur_char_pos + 1) % 25
+            n+=1
+
+else:
+    rm_col_pals = width - palin_cols
+    rm_row_pals = height - palin_rows
+
+    for x in range(rm_col_pals):
+        grid[-1][len(grid[-1]) - 1 - x] = "b"
+
+    for x in range(rm_row_pals):
+        grid[len(grid) - 1 - x][-1] = "b"
+
+fincalc = calc_grid(grid)
+
+if fincalc[0] != palin_cols or fincalc[1] != palin_rows:
+    imp()
 
 print('\n'.join([' '.join(x) for x in grid]))
