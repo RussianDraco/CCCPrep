@@ -1,3 +1,5 @@
+
+
 from collections import defaultdict
 import tkinter as tk
 import math
@@ -18,28 +20,38 @@ interNum = int(dimensions[0])
 newEdgeList = []
 visited = [False] * interNum
 
-currentNode = 0
-visited[0] = True
-dist = 0
-path = []
+# Kruskal's algorithm
+parent = list(range(interNum))
+rank = [0] * interNum
+
+def find(x):
+    if parent[x] != x:
+        parent[x] = find(parent[x])
+    return parent[x]
+
+def union(x, y):
+    xroot = find(x)
+    yroot = find(y)
+    if xroot == yroot:
+        return
+    if rank[xroot] < rank[yroot]:
+        parent[xroot] = yroot
+    elif rank[xroot] > rank[yroot]:
+        parent[yroot] = xroot
+    else:
+        parent[yroot] = xroot
+        rank[xroot] += 1
 
 sortedEdges = sorted(graph.edges, key=lambda x: x[3])
 
-while False in visited:
-    if not visited[sortedEdges[0][0] - 1] or not visited[sortedEdges[0][1] - 1]:
-        if visited[sortedEdges[0][0] - 1]:
-            currentNode = sortedEdges[0][1]
-        else:
-            currentNode = sortedEdges[0][0]
-        visited[currentNode - 1] = True
-        dist += sortedEdges[0][2]
-        path.append(sortedEdges[0][3])
-        newEdgeList.append(sortedEdges.pop(0))
+for edge in sortedEdges:
+    if find(edge[0]-1) != find(edge[1]-1):
+        union(edge[0]-1, edge[1]-1)
+        newEdgeList.append(edge)
+        visited[edge[0]-1] = True
+        visited[edge[1]-1] = True
 
-
-
-
-
+# GUI code
 def display_graph(newEdgeList, visited):
     # Create a window for the GUI
     window = tk.Tk()
