@@ -19,6 +19,8 @@ visited = [False] * interNum
 
 currentNode = 0
 visited[0] = True
+dist = 0
+path = []
 while False in visited:
     bestEdge = None
     for adj in graph.adjs[currentNode]:
@@ -27,5 +29,12 @@ while False in visited:
         if adj[2] < bestEdge[2]:
             bestEdge = adj
     if bestEdge == None:
-        currentNode = visited.index(False)
+        currentNode = path.pop()
+        dist -= newAdjList[currentNode].pop()[-1]
         continue
+    newAdjList[currentNode].append(bestEdge)
+    dist += bestEdge[1]
+    newAdjList[bestEdge[0]].append([currentNode, bestEdge[1], bestEdge[2]])
+    visited[bestEdge[0]] = True
+    path.append(bestEdge[0])
+    currentNode = bestEdge[0]
