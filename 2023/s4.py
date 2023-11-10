@@ -1,5 +1,6 @@
 from collections import defaultdict
 import tkinter as tk
+import math
 
 class Graph:
     def __init__(self):
@@ -23,6 +24,7 @@ visited[0] = True
 dist = 0
 path = []
 while False in visited:
+    print(str(visited))
     bestEdge = [None, None, float("inf")]
     for adj in graph.adjs[currentNode]:
         if visited[adj[0]]:
@@ -33,7 +35,10 @@ while False in visited:
         try:
             currentNode = path.pop()
         except IndexError:
-            break
+            if not False in visited:
+                break
+            else:
+                continue
 
         dist -= newAdjList[currentNode].pop()[-1]
         continue
@@ -58,30 +63,36 @@ def display_graph(newAdjList, visited):
 
     canvas.create_text(250, 25, text="ALL NODES ARE 1 LESS ON GRAPH THAN IN INPUT")
 
-    # Iterate through the newAdjList and draw a circle for each node
+    # Calculate the number of nodes and the radius of the circle that will contain them
+    num_nodes = len(newAdjList)
+    radius = min(200, (500 / 2) * 0.8)
+
+    # Calculate the coordinates of each node on the circle
+    node_coords = []
+    for i in range(num_nodes):
+        angle = i * (2 * math.pi / num_nodes)
+        x = 250 + radius * math.cos(angle)
+        y = 250 + radius * math.sin(angle)
+        node_coords.append((x, y))
+
+    # Draw the nodes and their labels
     nodes = {}
-    for node in newAdjList:
-        x = 50 + node * 50
-        y = 50 + node * 50
+    for i, node in enumerate(newAdjList):
+        x, y = node_coords[i]
         nodes[node] = canvas.create_oval(x-10, y-10, x+10, y+10, fill="white", outline="black")
         canvas.create_text(x, y, text=str(node))
 
-    # Iterate through the newAdjList again and draw a line between each node and its adjacent nodes
+    # Draw the edges between the nodes
     for node, edges in newAdjList.items():
         for edge in edges:
             if visited[node] and visited[edge[0]]:
-                canvas.create_line(
-                    50 + node * 50, 50 + node * 50,
-                    50 + edge[0] * 50, 50 + edge[0] * 50,
-                    arrow=tk.LAST
-                )
-                canvas.create_text(
-                    (50 + node * 50 + 50 + edge[0] * 50) / 2,
-                    (50 + node * 50 + 50 + edge[0] * 50) / 2,
-                    text=str(edge[2]) #shows edge cost on arrow
-                )
+                x1, y1 = node_coords[node]
+                x2, y2 = node_coords[edge[0]]
+                canvas.create_line(x1, y1, x2, y2, arrow=tk.LAST)
+                canvas.create_text((x1 + x2) / 2, (y1 + y2) / 2, text=str(edge[2]))
 
     # Display the GUI window
     window.mainloop()
+
 
 display_graph(newAdjList, visited)
