@@ -3,7 +3,7 @@
 raw_vals = [int(x) for x in input().split(' ')]
 
 note_number = raw_vals[0]
-max_note = raw_vals[1] #dosent matter for mark categories 1, 2, 3
+max_note = raw_vals[1] #doesn't matter for mark categories 1, 2, 3
 sample_number = raw_vals[2]
 
 def imp():
@@ -15,12 +15,16 @@ if note_number > sample_number or sample_number > (note_number * (note_number + 
 
 piece_ar = [1] * note_number
 current_samples = note_number
-sample_contribution = [1] * note_number
-sample_makeup = sample_number - note_number
 
-while current_samples != sample_number:
-    piece_ar
-
+indx = 0
+u = 2
+while current_samples < sample_number:
+    piece_ar[indx] = u
+    u+=1
+    indx+=1
+    
+    
+ 
 
 
 """
