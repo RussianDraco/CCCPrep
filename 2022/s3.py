@@ -26,11 +26,22 @@ if (sqrtVal := math.sqrt(1 + 4 * (2 * (sample_number - note_number)))).is_intege
         sqrtVal = int((-1 + sqrtVal)/2)
         solution([x for x in range(2, sqrtVal + 2)] + [1] * (note_number - sqrtVal))
 
+#start from closest simple solution (by constructing from a floored n) and work from there
 sqrtVal = math.floor((-1 + sqrtVal)/2) #change sqrtval to n and floor it
 
 solvingAr = [x for x in range(2, sqrtVal + 2)] + [1] * (note_number - sqrtVal)
 
-currentSampleCount = (sqrtVal * (sqrtVal + 1)) / 2
+nextUnique = sqrtVal + 2
+
+currentSampleCount = (sqrtVal * (sqrtVal + 1)) / 2 + note_number
+sampleCountMakeup = sample_number - currentSampleCount
+
+print(str(solvingAr))
+print(str(sampleCountMakeup))
+
+if sampleCountMakeup == 1:
+    solvingAr[-1] = nextUnique
+    solution(solvingAr)
 
 
 
