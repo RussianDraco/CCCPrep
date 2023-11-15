@@ -1,6 +1,7 @@
 #solving 2022 s3 for mark categories 1, 2, 3
+import math
 
-raw_vals = [int(x) for x in input().split(' ')]
+raw_vals = [int(x) for x in input().split(' ')] #input: note number, max note, sample number  -  N, M, K
 
 note_number = raw_vals[0]
 max_note = raw_vals[1] #doesn't matter for mark categories 1, 2, 3
@@ -10,21 +11,27 @@ def imp():
     print("-1")
     exit(0)
 
+def solution(x): #x is an array of ints
+    print(' '.join([str(y) for y in x]))
+    exit(0)
+
 if note_number > sample_number or sample_number > (note_number * (note_number + 1)) / 2:
     imp()
 
-piece_ar = [1] * note_number
-current_samples = note_number
+#check if simple solution exists
+if (sqrtVal := math.sqrt(1 + 4 * (2 * (sample_number - note_number)))).is_integer():
+    if sqrtVal % 2 == 1:
+        #simple solution exists
+        #change sqrtval to n from n(n-1)/2
+        sqrtVal = int((-1 + sqrtVal)/2)
+        solution([x for x in range(2, sqrtVal + 2)] + [1] * (note_number - sqrtVal))
 
-indx = 0
-u = 2
-while current_samples < sample_number:
-    piece_ar[indx] = u
-    u+=1
-    indx+=1
-    
-    
- 
+sqrtVal = math.floor((-1 + sqrtVal)/2) #change sqrtval to n and floor it
+
+solvingAr = [x for x in range(2, sqrtVal + 2)] + [1] * (note_number - sqrtVal)
+
+currentSampleCount = (sqrtVal * (sqrtVal + 1)) / 2
+
 
 
 """
@@ -99,10 +106,10 @@ piece | sampleN
 0, 0, 0, 1, 1, 1 | 12
 0, 0, 0, 0, 1, 1 | 16
 
-1, 1, 1, 1, 1, 1, 1 | 7
-0, 1, 1, 1, 1, 1, 1 | 8
-0, 0, 1, 1, 1, 1, 1 | 10
-0, 0, 0, 1, 1, 1, 1 | 13
-0, 0, 0, 0, 1, 1, 1 | 17
-0, 0, 0, 0, 0, 1, 1 | 22
+0 | 1, 1, 1, 1, 1, 1, 1 | 7
+1 | 0, 1, 1, 1, 1, 1, 1 | 8
+2 | 0, 0, 1, 1, 1, 1, 1 | 10
+3 | 0, 0, 0, 1, 1, 1, 1 | 13
+4 | 0, 0, 0, 0, 1, 1, 1 | 17
+5 | 0, 0, 0, 0, 0, 1, 1 | 22
 """
