@@ -18,32 +18,33 @@ def solution(x): #x is an array of ints
 if note_number > sample_number or sample_number > (note_number * (note_number + 1)) / 2:
     imp()
 
-#check if simple solution exists
-if (sqrtVal := math.sqrt(1 + 4 * (2 * (sample_number - note_number)))).is_integer():
-    if sqrtVal % 2 == 1:
-        #simple solution exists
-        #change sqrtval to n from n(n-1)/2
-        sqrtVal = int((-1 + sqrtVal)/2)
-        solution([x for x in range(2, sqrtVal + 2)] + [1] * (note_number - sqrtVal))
 
-#start from closest simple solution (by constructing from a floored n) and work from there
-sqrtVal = math.floor((-1 + sqrtVal)/2) #change sqrtval to n and floor it
+def solve(N, K, U = 0):
+    #check if simple solution exists
+    if (sqrtVal := math.sqrt(1 + 4 * (2 * (K - N)))).is_integer():
+        if sqrtVal % 2 == 1:
+            #simple solution exists
+            #change sqrtval to n from n(n-1)/2
+            sqrtVal = int((-1 + sqrtVal)/2)
+            return [x for x in range(U + 2, U + sqrtVal + 2)] + [1] * (N - sqrtVal)
 
-solvingAr = [x for x in range(2, sqrtVal + 2)] + [1] * (note_number - sqrtVal)
+    #start from closest simple solution (by constructing from a floored n) and work from there
+    sqrtVal = math.floor((-1 + sqrtVal)/2) #change sqrtval to n and floor it
 
-nextUnique = sqrtVal + 2
+    solvingAr = [x for x in range(U + 2, U + sqrtVal + 2)] + [1] * (N - sqrtVal)
+    print(str(solvingAr))
 
-currentSampleCount = (sqrtVal * (sqrtVal + 1)) / 2 + note_number
-sampleCountMakeup = sample_number - currentSampleCount
+    nextUnique = U + sqrtVal + 2
 
-print(str(solvingAr))
-print(str(sampleCountMakeup))
+    if K - ((sqrtVal * (sqrtVal + 1)) / 2 + N) == 1:
+        solvingAr[-1] = nextUnique
+        return solvingAr
 
-if sampleCountMakeup == 1:
-    solvingAr[-1] = nextUnique
-    solution(solvingAr)
+    print(str(N - sqrtVal - 2) + " " + str(K - ((sqrtVal * (sqrtVal + 1)) / 2 + N)) + " " + str(nextUnique))
 
+    return solvingAr[:sqrtVal + 2] + solve(N - sqrtVal - 2, int(K - ((sqrtVal * (sqrtVal + 1)) / 2 + N)) + N - sqrtVal - 2, nextUnique)
 
+solution(solve(note_number, sample_number))
 
 """
 Most efficent:
