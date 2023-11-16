@@ -19,6 +19,16 @@ if note_number > sample_number or sample_number > (note_number * (note_number + 
     imp()
 
 
+def inefficentSampleCount(ar):
+    if len(ar) == 1: return 1
+    holdar = []
+    for x in ar:
+        if x in holdar:
+            break
+        holdar.append(x)
+
+    return len(holdar) + inefficentSampleCount(ar[1:])
+
 def solve(N, K, U = 0):
     #check if simple solution exists
     if (sqrtVal := math.sqrt(1 + 4 * (2 * (K - N)))).is_integer():
@@ -40,11 +50,17 @@ def solve(N, K, U = 0):
         solvingAr[-1] = nextUnique
         return solvingAr
 
-    print(str(N - sqrtVal - 2) + " " + str(K - ((sqrtVal * (sqrtVal + 1)) / 2 + N)) + " " + str(nextUnique))
+    return solvingAr[:sqrtVal + 2] + solve(N - sqrtVal - 2, int(K - ((sqrtVal * (sqrtVal + 1)) / 2 + N)) + N - sqrtVal - 2 - 1, nextUnique)
 
-    return solvingAr[:sqrtVal + 2] + solve(N - sqrtVal - 2, int(K - ((sqrtVal * (sqrtVal + 1)) / 2 + N)) + N - sqrtVal - 2, nextUnique)
+#solution(solve(note_number, sample_number))
 
-solution(solve(note_number, sample_number))
+for n in range(2, 10):
+    for k in range(2, int(n * (n + 1)/2)):
+        try:
+            solvAr = solve(n, k)
+            print("N: " + str(n) + "|K: " + str(k) + "| " + ("Correct" if inefficentSampleCount(solvAr) == k else "Incorrect") + "| " + str(solvAr))
+        except ValueError:
+            pass
 
 """
 Most efficent:
