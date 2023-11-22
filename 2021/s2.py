@@ -1,21 +1,29 @@
 rows = int(input())
 cols = int(input())
 inNum = int(input())
-changes = []
 
-for x in range(inNum):
-    changes.append(input().split(" "))
+colswipes = [False] * cols
+rowswipes = [False] * rows
+
+for i in range(inNum):
+    inp = input().split()
+    index = int(inp[1]) - 1
+    if inp[0] == "R":
+        rowswipes[index] = not rowswipes[index]
+    elif inp[0] == "C":
+        colswipes[index] = not colswipes[index]
 
 canvas = [[False for x in range(cols)] for y in range(rows)]
 
-for chng in changes:
-    lineNum = int(chng[1]) - 1
-    if chng[0] == "R":
-        for x in range(len(canvas[lineNum])):
-            canvas[lineNum][x] = not canvas[lineNum][x]
-    elif chng[0] == "C":
-        for x in range(rows):
-            canvas[x][int(chng[1]) - 1] = not canvas[x][int(chng[1]) - 1]
+for i in range(rows):
+    if rowswipes[i]:
+        for j in range(cols):
+            canvas[i][j] = not canvas[i][j]
+
+for i in range(cols):
+    if colswipes[i]:
+        for j in range(rows):
+            canvas[j][i] = not canvas[j][i]
 
 n = 0
 for x in canvas:
