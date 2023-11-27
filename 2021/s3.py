@@ -9,11 +9,11 @@ allPos = [x[0] for x in ppl]
 smallP, bigP = min(allPos), max(allPos)
 
 besttime = float('inf')
+tl = []
 for x in range(smallP, bigP+1):
     totaltime = 0
 
     for p in ppl:
-        parttime = 0
         if p[0] < x:
             if (p[0] + p[2]) > x:
                 continue
@@ -27,6 +27,8 @@ for x in range(smallP, bigP+1):
         elif p[0] == x:
             continue
 
+    tl.append(totaltime)
     besttime = min(besttime, totaltime)
 
 print(besttime)
+print([str(x) for x in tl])
