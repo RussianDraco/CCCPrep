@@ -4,17 +4,29 @@ ppl = []
 for x in range(pplNum):
     ppl.append([int(x) for x in input().split(' ')]) #position, speed(1 unit per x seconds), hearing distance
 
-avg_pos = round(sum([(x[0]*x[1]) for x in ppl])/pplNum)
+allPos = [x[0] for x in ppl]
 
-time = 0
+smallP, bigP = min(allPos), max(allPos)
 
-for p in ppl:
-    if (p[0] - p[2]) <= avg_pos <= (p[0] + p[2]):
-        continue
-    else:
-        if avg_pos < (p[0] - p[2]):
-            time += p[1] * (p[0] - p[2] - avg_pos)
-        elif avg_pos > (p[0] + p[2]):
-            time += p[1] * (avg_pos - (p[0] + p[2]))
+besttime = float('inf')
+for x in range(smallP, bigP+1):
+    totaltime = 0
 
-print(time)
+    for p in ppl:
+        parttime = 0
+        if p[0] < x:
+            if (p[0] + p[2]) > x:
+                continue
+            else:
+                totaltime += (x - (p[0] + p[2])) * p[1]
+        elif p[0] > x:
+            if (p[0] - p[2]) < x:
+                continue
+            else:
+                totaltime += ((p[0] - p[2]) - x) * p[1]
+        elif p[0] == x:
+            continue
+
+    besttime = min(besttime, totaltime)
+
+print(besttime)
