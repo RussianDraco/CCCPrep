@@ -8,9 +8,7 @@ allPos = [x[0] for x in ppl]
 
 smallP, bigP = min(allPos), max(allPos)
 
-besttime = float('inf')
-tl = []
-for x in range(smallP, bigP+1):
+def all_dist(x):
     totaltime = 0
 
     for p in ppl:
@@ -27,8 +25,28 @@ for x in range(smallP, bigP+1):
         elif p[0] == x:
             continue
 
-    tl.append(totaltime)
-    besttime = min(besttime, totaltime)
+    return totaltime
 
-print(besttime)
-print([str(x) for x in tl])
+bestdist = float('inf')
+
+left = smallP
+right = bigP
+while left <= right:
+    mid = (left + right) // 2
+    
+    left_t = all_dist(mid - 1)
+    mid_t = all_dist(mid)
+    right_t = all_dist(mid + 1)
+
+    if mid_t < left_t and mid_t < right_t:
+        bestdist = mid_t
+        break
+    elif left_t == mid_t or right_t == mid_t:
+        bestdist = mid_t
+        break
+    elif mid_t <= right_t:
+        right = mid - 1
+    else:
+        left = mid + 1
+
+print(bestdist)
