@@ -3,32 +3,36 @@ from collections import deque, defaultdict
 rowNum = int(input())
 colNum = int(input())
 
+largestNum = max(rowNum, colNum)
+
 rows = []
 for i in range(rowNum):
     rows.append([int(x) for x in input().split(' ')])
 
-dict = defaultdict(list)
-xn = 1
+def factors(n):
+    for x in range(1, min(largestNum, n + 1)):
+        if n % x == 0:
+            if x <= largestNum and int(n / x) <= largestNum:
+                yield (int(x), int(n / x))
+
+dict = defaultdict(set)
 for x in rows:
-    yn = 1
     for y in x:
-        dict[y].append((xn, yn))
-        yn += 1
-    xn += 1
+        [dict[y].add((xn, yn)) for xn, yn in factors(y)]
 
 visited = {}
 q = deque()
-q.append((colNum, rowNum))
+q.append((1, 1))
 
 while q:
     row, col = q.popleft()
-    if row == 1 and col == 1:
+    if row == rowNum and col == colNum:
         print('yes')
         exit(0)
     if visited.get((row, col)) == True:
         continue
     visited[(row, col)] = True
-    g = dict.get(row * col)
+    g = list(dict.get(rows[row - 1][col - 1]))
     if not len(g) == 0:
         for x, y in g:
             if not visited.get((x, y)) == True:
