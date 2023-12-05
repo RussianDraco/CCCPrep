@@ -25,16 +25,17 @@ q = deque()
 q.append((1, 1))
 
 while q:
+    print(str(q))
     row, col = q.popleft()
     if row == rowNum and col == colNum:
         print('yes')
         exit(0)
-    if visited.get((row, col)) == True:
+    if visited.get(rows[row - 1][col - 1]) == True:
         continue
-    visited[(row, col)] = True
+    visited[rows[row - 1][col - 1]] = True
     g = list(dict.get(rows[row - 1][col - 1]))
     if not len(g) == 0:
         for x, y in g:
-            if not visited.get((x, y)) == True:
+            if not visited.get(rows[x - 1][y - 1]) == True:
                 q.append((x, y))
 print('no')
