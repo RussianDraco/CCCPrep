@@ -10,7 +10,7 @@ for i in range(rowNum):
     rows.append([int(x) for x in input().split(' ')])
 
 def factors(n):
-    for x in range(1, min(largestNum, n + 1)):
+    for x in range(1, n + 1):
         if n % x == 0:
             if x <= largestNum and int(n / x) <= largestNum:
                 yield (int(x), int(n / x))
@@ -33,9 +33,9 @@ while q:
     if visited.get(rows[row - 1][col - 1]) == True:
         continue
     visited[rows[row - 1][col - 1]] = True
-    g = list(dict.get(rows[row - 1][col - 1]))
-    if not len(g) == 0:
-        for x, y in g:
+    g = dict.get(rows[row - 1][col - 1])
+    if not g == None:
+        for x, y in list(g):
             if not visited.get(rows[x - 1][y - 1]) == True:
                 q.append((x, y))
 print('no')
