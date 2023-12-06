@@ -12,7 +12,7 @@ for i in range(rowNum):
 def factors(n):
     for x in range(1, n + 1):
         if n % x == 0:
-            if x <= largestNum and int(n / x) <= largestNum:
+            if x <= rowNum and int(n / x) <= colNum:
                 yield (int(x), int(n / x))
 
 dict = defaultdict(set)
@@ -25,7 +25,6 @@ q = deque()
 q.append((1, 1))
 
 while q:
-    print(str(q))
     row, col = q.popleft()
     if row == rowNum and col == colNum:
         print('yes')
